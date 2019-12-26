@@ -1,3 +1,24 @@
+# Removing Data folder
+
+*/DATA/*
+*DATA/*
+*DATA*
+*/Data/*
+*Data/*
+*Data*
+
+#
+#   PPP   Y   Y  TTTTT  H   H     O     N    N
+#   P  P   Y Y     T    H   H   O   O   NN   N
+#   P P     Y      T    HHHHH  O     O  N N  N
+#   P       Y      T    H   H  O     O  N  N N
+#   P       Y      T    H   H   O   O   N   NN
+#   P       Y      T    H   H     O     N    N
+#
+
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,3 +148,49 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+###
+#
+#  RRR
+#  R  R
+#  RRR
+#  R  R
+#  R   R
+#
+##
+ 
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# RStudio files
+.Rproj.user/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
+
+# knitr and R markdown default cache directories
+/*_cache/
+/cache/
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
+.Rproj.user
+
