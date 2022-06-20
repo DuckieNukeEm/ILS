@@ -6,36 +6,49 @@ drop table if exists t_base_v;
 create temporary table t_base_v
 as
 select
-    b.*
+     b.*
+    ,sum(orig_occurance_count) over (
+                        partition by
+                             b.vendor_nbr
+                            ,b.order_dt
+                            ,b.null_incld) as occurance_count
+    ,row_number() over (
+                        partition by
+                             b.vendor_nbr
+                            ,b.order_dt
+                            ,b.null_incld 
+                        order by
+                            b.orig_occurance_count desc) as rn
 from
     (
     select
          vendor_nbr
-        ,max(INITCAP(trim(vendor_name))) as vendor_name
+        ,INITCAP(trim(vendor_name)) as vendor_name
         ,order_dt
         ,'N' as null_incld
-        ,count(1) as occurance_count
+        ,count(1) as orig_occurance_count
     from
         raw_ddl.iowa_liquor_sales s 
     where
         vendor_nbr is not null
-        and category_name is not null
-    group by 1,3
+        and vendor_name is not null
+    group by 1,2,3
     
     union all 
 
     select
          vendor_nbr
-        ,max(INITCAP(trim(vendor_name))) as vendor_name
+        ,INITCAP(trim(vendor_name)) as vendor_name
         ,order_dt
         ,'Y' as null_incld
-        ,count(1) as occurance_count
+        ,count(1) as orig_occurance_count
     from
         raw_ddl.iowa_liquor_sales  
     where
         vendor_nbr is not null
-    group by 1,3
+    group by 1,2,3
     ) b;
+
 --###############################################################################
 --#  sorting and lagging                                                        #
 --###############################################################################
@@ -74,7 +87,9 @@ from
                                 a.occurance_count desc
                             ) as rn
         from
-        t_base_v a
+            t_base_v a
+        where
+            a.rn = 1
         order by 1,2,3,4
     ) b;
 
@@ -228,7 +243,7 @@ WHERE
 ;
 
 --###############################################################################
---# updating the end date from the last record of each category                 #
+--# updating the end date from the last record of each vendor                   #
 --###############################################################################
 
 update
@@ -294,7 +309,3 @@ from
         ) b
         on b.vendor_nbr = n.vendor_nbr
 ;
-
-select * from t_base_v where vendor_nbr = 90 and null_incld = 'N' order_dt = '2016-10-03'
-select * from t_base_v a inner join t_base_v b on a.vendor_nbr = b.vendor_nbr
-and a.order_dt = b.order_dt and a.vendor_name != b.vendor_name and a.null_incld = b.null_incld

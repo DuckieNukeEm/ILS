@@ -6,7 +6,19 @@ drop table if exists t_base;
 create temporary table t_base 
 as
 select
-    b.*
+     b.*
+    ,sum(orig_occurance_count) over (
+                        partition by
+                             b.category_nbr
+                            ,b.order_dt
+                            ,b.null_incld) as occurance_count
+    ,row_number() over (
+                        partition by
+                             b.category_nbr
+                            ,b.order_dt
+                            ,b.null_incld 
+                        order by
+                            b.orig_occurance_count desc) as rn
 from
     (
     select
@@ -14,7 +26,7 @@ from
         ,INITCAP(trim(category_name)) as category_name
         ,order_dt
         ,'N' as null_incld
-        ,count(1) as occurance_count
+        ,count(1) as orig_occurance_count
     from
         raw_ddl.iowa_liquor_sales s 
     where
@@ -29,7 +41,7 @@ from
         ,INITCAP(trim(category_name)) as category_name
         ,order_dt
         ,'Y' as null_incld
-        ,count(1) as occurance_count
+        ,count(1) as orig_occurance_count
     from
         raw_ddl.iowa_liquor_sales  
     where
@@ -74,7 +86,9 @@ from
                                 a.occurance_count desc
                             ) as rn
         from
-        t_base a
+            t_base a
+        where
+            a.rn = 1
         order by 1,2,3,4
     ) b;
 
@@ -216,7 +230,7 @@ where
 --###############################################################################
 delete
 from 
-duckie_ddl.d_ils_category o
+    duckie_ddl.d_ils_category o
 using
       t_temp_merge AS n
 WHERE 
