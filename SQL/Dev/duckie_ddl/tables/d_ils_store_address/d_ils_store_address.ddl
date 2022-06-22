@@ -9,7 +9,6 @@ create table duckie_ddl.d_ils_store_address(
     ,lat                 varchar(18)
     ,long                varchar(18)
     ,store_hash          varchar(32)
-    ,insert_date         date
     ,PRIMARY KEY (store_hash)
 );
 --alter table transform_ddl.d_ils_store_address owner to rw_role;

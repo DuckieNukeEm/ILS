@@ -1,6 +1,6 @@
 --begin;
 --###############################################################################
---# Creating base store table                                                   #
+--# Creating base item table                                                    #
 --###############################################################################
 drop table if exists core_base_table;
 create temporary table core_base_table
