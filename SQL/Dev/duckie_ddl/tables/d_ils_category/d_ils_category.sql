@@ -27,12 +27,11 @@ from
             ,s.order_dt
             ,count(1) as orig_occurance_count
         from
-            raw_ddl.iowa_liquor_sales s 
+            raw_ddl.${TABLE_NAME} s 
         where
             category_nbr is not null
         group by 1,2,3
     ) s;
-
 
 --###############################################################################
 --# stacking two formats of the table                                           #
@@ -91,7 +90,6 @@ select
                         ) as lag_col_hash
 from
     t_base b;
-
 --###############################################################################
 --# creating gap and island flags                                               #
 --###############################################################################
@@ -224,7 +222,6 @@ from
         and N.null_incld = 'N'
 where
     Y.null_incld = 'Y';
-
 --###############################################################################
 --# removing any records that span before a record in the orig table            #
 --###############################################################################

@@ -45,5 +45,6 @@ select
     ,pt.is_generated
     ,pt.generation_expression
     ,pt.is_updatable
+    ,pt.table_name as tablename
 from
     information_schema.columns as pt;
