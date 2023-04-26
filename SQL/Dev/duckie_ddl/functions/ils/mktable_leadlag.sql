@@ -37,11 +37,11 @@ CREATE OR REPLACE FUNCTION mktable_ils_leadlag()
             null_incld char(1),
             lag_order_dt date,
             lag_id_hash date
-            )',  t_name); 
+					)',  t_name); 
     return t_name;
 END
 $$;
-select datconnlimit from pg_database where datname='postgres'
+
 /*______________________________________________________________________________
   ##############################################################################
                                 TESTING
